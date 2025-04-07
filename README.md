@@ -16,8 +16,6 @@ It is designed to showcase DevOps practices in containerization, CI/CD, Kubernet
 
 ## 🖼 Architecture Diagram
 
-> 📌 Place your architecture diagram in `architecture/diagram.png` and embed below.
-
 ![ShopVerse Architecture](./architecture/diagram.png)
 
 ---
@@ -50,8 +48,6 @@ Each service is located in `services/<service-name>` with:
 - API spec
 - DevOps TODO checklist
 
-See full breakdown in [`docs/service-specs.md`](./docs/service-specs.md)
-
 ---
 
 ## 🚀 DevOps Tasks (For You to Implement 💪)
@@ -65,8 +61,6 @@ See full breakdown in [`docs/service-specs.md`](./docs/service-specs.md)
 | ✅ Infrastructure-as-Code   | AWS infra with Terraform |
 | ✅ Secrets Management       | Use K8s secrets or AWS Secrets Manager |
 | ✅ Production Deployment    | Deploy to EKS with managed DBs |
-
-More details: [`docs/devops-tasks.md`](./docs/devops-tasks.md)
 
 ---
 

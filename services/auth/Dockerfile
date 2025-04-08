@@ -1,34 +1,32 @@
-# Use an official Python runtime as a parent image
-ARG PYTHON_VERSION=3.12.3
-FROM python:${PYTHON_VERSION}-slim
+# Stage 1: Base Image Setup
+FROM python:3.12-slim-bookworm AS base
 
-# Prevent Python from writing .pyc files to disk and buffer output
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+# Set environment variables for non-interactive apt installs
+ENV DEBIAN_FRONTEND=noninteractive
 
-WORKDIR /app
+# Set the working directory inside the container
+WORKDIR /usr/src/app
 
-# Create a non-privileged user to run the application.
-ARG UID=10001
-RUN adduser --disabled-password --gecos "" --home "/nonexistent" --shell "/sbin/nologin" --no-create-home --uid "${UID}" appuser
+# Copy dependency file(s) and install dependencies
+COPY requirements.txt ./
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
 
-# Copy only the requirements file first to take advantage of Docker cache when dependencies do not change.
-COPY requirements.txt .
+# (Optional) Install OpenTelemetry auto-instrumentation if needed
+# RUN pip install opentelemetry-bootstrap && opentelemetry-bootstrap -a install
 
-# Install dependencies without caching to keep the image lean
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy the rest of the source code into the container
+# Copy the entire application source code into the container
 COPY . .
 
-# Switch to the non-privileged user
-USER appuser
+# ✅ Copy .env file into the container so pydantic_settings can read it
+COPY .env .env
 
-ENV PYTHONPATH=/app
+# Set environment variables as needed (e.g., your app’s port)
+ENV PORT=3000
 
-# Expose the port that the application listens on
+# Expose the port on which the application will run
 EXPOSE 3000
 
-# Use the exec form of CMD so that Docker signals work correctly
+# Define the entry point: Start the Uvicorn server with your app (adjust the path as needed)
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "3000"]
  

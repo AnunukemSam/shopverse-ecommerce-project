@@ -6,3 +6,4 @@ python-jose
 passlib
 python-dotenv
 python-multipart
+pydantic_settings==2.8.1

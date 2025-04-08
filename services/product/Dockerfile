@@ -35,4 +35,4 @@ COPY . .
 EXPOSE 3001
 
 # Run the application.
-CMD node app.js
+CMD ["node", "app.js"]

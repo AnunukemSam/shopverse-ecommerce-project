@@ -12,13 +12,10 @@ COPY requirements.txt ./
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
-# (Optional) Install OpenTelemetry auto-instrumentation if needed
-# RUN pip install opentelemetry-bootstrap && opentelemetry-bootstrap -a install
-
 # Copy the entire application source code into the container
 COPY . .
 
-# ✅ Copy .env file into the container so pydantic_settings can read it
+# Copy .env file into the container so pydantic_settings can read it
 COPY .env .env
 
 # Set environment variables as needed (e.g., your app’s port)

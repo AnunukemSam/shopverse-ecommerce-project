@@ -34,8 +34,10 @@ product/
 │   └── productRoutes.js      # API routes
 ├── models/
 │   └── Product.js            # Mongoose schema
+├── seed.js                   # Seeder script for dev environments
 ├── .env.example              # Sample environment variables
 ├── package.json              # Node scripts & dependencies
+├── Dockerfile                # Container build file
 └── README.md                 # This file
 ```
 
@@ -76,9 +78,11 @@ Base route: `/api/products`
 
 Rename `.env.example` to `.env` and configure:
 ```bash
-MONGO_URI=mongodb://localhost:27017/shopverse-product
+MONGO_URI=mongodb://mongodb:27017/shopverse-products
 PORT=3001
 ```
+
+> NOTE: When running locally without Docker, replace `mongodb` with `localhost`.
 
 ---
 
@@ -88,14 +92,60 @@ PORT=3001
 # Install dependencies
 npm install
 
-# Run in development with auto-restart
-npm run dev
-
-# Or run directly
-npm start
+# Run locally
+node app.js
 ```
 
-> Ensure MongoDB is running locally on port 27017 or configure MONGO_URI.
+> Ensure MongoDB is running either:
+> - Locally via `mongod`
+> - Or in Docker: `docker run -d --name mongodb -p 27017:27017 mongo`
+
+---
+
+## 🐳 Docker Instructions
+
+### Build the image
+```bash
+docker build -t shopverse-product .
+```
+
+### Create a Docker network (only once)
+```bash
+docker network create shopverse-net
+```
+
+### Run MongoDB container (for development)
+```bash
+docker run -d --name mongodb \
+  --network shopverse-net \
+  -p 27017:27017 \
+  -e MONGO_INITDB_DATABASE=shopverse-products \
+  mongo:6
+```
+
+### Run the product service container
+```bash
+docker run -d --name product-service \
+  --network shopverse-net \
+  --env-file .env \
+  -p 3001:3001 \
+  shopverse-product
+```
+
+> The app will be accessible at: `http://<your-ip>:3001/api/products`
+
+---
+
+## 🐣 Seeding Products (Optional)
+Run the seed script (inside or outside Docker):
+```bash
+node seed.js
+```
+
+OR from inside a running container:
+```bash
+docker exec -it product-service node seed.js
+```
 
 ---
 
@@ -103,7 +153,7 @@ npm start
 
 | Task                          | Description                              |
 |-------------------------------|------------------------------------------|
-| Dockerize the service         | Create Dockerfile + .dockerignore        |
+| Dockerize the service         | ✅ Done - using lightweight Node Alpine  |
 | CI Workflow                   | GitHub Actions for build/test/deploy     |
 | K8s YAML                      | Deployment & Service manifests           |
 | Externalize secrets           | Use K8s secrets or AWS Secrets Manager   |
@@ -122,7 +172,7 @@ npm start
 
 | Item            | Location                   |
 |-----------------|----------------------------|
-| Dockerfile      | `TODO`                     |
+| Dockerfile      | `services/product/Dockerfile` |
 | K8s YAML        | `kubernetes/product/`      |
 | CI/CD Workflow  | `.github/workflows/`       |
 | Terraform       | `terraform/modules/`       |
@@ -131,3 +181,4 @@ npm start
 
 ## 📬 Feedback
 Have improvements or suggestions? Open a PR or submit an issue — this service is part of the ShopVerse DevOps training suite.
+ 

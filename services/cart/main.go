@@ -41,14 +41,13 @@ func initDB() {
 		log.Fatal(err)
 	}
 
-	collection = client.Database("shopverse_cart").Collection("cart_items")
+	collection = client.Database("shopverse-cart").Collection("cart_items")
 	fmt.Println("Connected to MongoDB!")
 }
 
 func getCartItems(c *gin.Context) {
-	userId := c.Query("userId")
 	var items []CartItem
-	cursor, err := collection.Find(context.TODO(), bson.M{"userId": userId})
+	cursor, err := collection.Find(context.TODO(), bson.M{})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -68,11 +67,15 @@ func addToCart(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	fmt.Printf("📦 Inserting item: %+v\n", item)
+
 	result, err := collection.InsertOne(context.TODO(), item)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
 	item.ID = result.InsertedID.(primitive.ObjectID)
 	c.JSON(http.StatusCreated, item)
 }

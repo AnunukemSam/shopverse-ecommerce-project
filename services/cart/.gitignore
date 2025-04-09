@@ -1,0 +1,31 @@
+# Binaries
+/cart
+*.exe
+*.out
+*.test
+
+# Vendor / modules (if you're not vendoring)
+vendor/
+
+# IDE/editor settings
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+logs/
+
+# Environment files
+.env
+
+# Dependency artifacts
+go.sum
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+*.tar
+

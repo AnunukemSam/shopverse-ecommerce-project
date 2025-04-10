@@ -30,7 +30,7 @@ async fn update_item(
     item: web::Json<InventoryItem>,
     data: web::Data<Db>,
 ) -> impl Responder {
-    let item_id_str = item_id.clone(); // ✅ Corrected — no .into_inner()
+    let item_id_str = item_id.into_inner(); // No need to clone if you use .into_inner() early
     let mut db = data.lock().unwrap();
 
     for stored_item in db.iter_mut() {
@@ -43,7 +43,7 @@ async fn update_item(
 }
 
 async fn delete_item(item_id: web::Path<String>, data: web::Data<Db>) -> impl Responder {
-    let item_id_str = item_id.clone(); // ✅ Corrected — no .into_inner()
+    let item_id_str = item_id.into_inner(); // again, consume once early
     let mut db = data.lock().unwrap();
     db.retain(|item| item.id != item_id_str);
     HttpResponse::NoContent().finish()

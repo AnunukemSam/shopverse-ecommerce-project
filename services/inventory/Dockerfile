@@ -1,5 +1,5 @@
 # ---------- BUILD STAGE ----------
-ARG RUST_VERSION=1.72
+ARG RUST_VERSION=1.86.0
 ARG APP_NAME=inventory_service
 
 FROM rust:${RUST_VERSION}-alpine AS builder

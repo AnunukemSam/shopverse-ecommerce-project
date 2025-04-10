@@ -20,4 +20,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
+app.Urls.Add("http://0.0.0.0:3004");
+
 app.Run();

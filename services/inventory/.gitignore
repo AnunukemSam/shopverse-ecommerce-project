@@ -1,0 +1,23 @@
+# Build artifacts
+/target/
+**/*.rlib
+**/*.rmeta
+
+# Cargo dependencies
+Cargo.lock  # Optional for libraries; keep for binaries
+
+# IDE/editor junk
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+
+# OS-specific junk
+.DS_Store
+Thumbs.db
+
+# Env/secrets
+.env
+

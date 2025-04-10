@@ -25,10 +25,16 @@ async fn add_item(item: web::Json<InventoryItem>, data: web::Data<Db>) -> impl R
     HttpResponse::Created().json(new_item)
 }
 
-async fn update_item(item_id: web::Path<String>, item: web::Json<InventoryItem>, data: web::Data<Db>) -> impl Responder {
+async fn update_item(
+    item_id: web::Path<String>,
+    item: web::Json<InventoryItem>,
+    data: web::Data<Db>,
+) -> impl Responder {
+    let item_id_str = item_id.clone(); // ✅ Corrected — no .into_inner()
     let mut db = data.lock().unwrap();
+
     for stored_item in db.iter_mut() {
-        if stored_item.id == item_id.into_inner() {
+        if stored_item.id == item_id_str {
             stored_item.quantity = item.quantity;
             return HttpResponse::Ok().json(stored_item);
         }
@@ -37,14 +43,17 @@ async fn update_item(item_id: web::Path<String>, item: web::Json<InventoryItem>,
 }
 
 async fn delete_item(item_id: web::Path<String>, data: web::Data<Db>) -> impl Responder {
+    let item_id_str = item_id.clone(); // ✅ Corrected — no .into_inner()
     let mut db = data.lock().unwrap();
-    db.retain(|item| item.id != item_id.into_inner());
+    db.retain(|item| item.id != item_id_str);
     HttpResponse::NoContent().finish()
 }
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let inventory_data = web::Data::new(Mutex::new(vec![]));
+    let inventory_data = web::Data::new(Mutex::new(Vec::<InventoryItem>::new()));
+
+    println!("🚀 Inventory service running at http://0.0.0.0:3005");
 
     HttpServer::new(move || {
         App::new()
@@ -54,7 +63,8 @@ async fn main() -> std::io::Result<()> {
             .route("/inventory/{id}", web::put().to(update_item))
             .route("/inventory/{id}", web::delete().to(delete_item))
     })
-    .bind(("127.0.0.1", 3004))?
+    .bind(("0.0.0.0", 3005))?
     .run()
     .await
 }
+ 

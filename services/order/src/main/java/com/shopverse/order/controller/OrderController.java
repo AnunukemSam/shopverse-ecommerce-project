@@ -9,11 +9,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/orders") // ✅ consistent route prefix
 public class OrderController {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    // ✅ Health check route
+    @GetMapping("/ping")
+    public String ping() {
+        return "🧾 Order service is alive!";
+    }
 
     @GetMapping
     public List<Order> getAllOrders() {
@@ -36,7 +42,8 @@ public class OrderController {
     public ResponseEntity<Void> deleteOrder(@PathVariable String id) {
         return orderRepository.findById(id).map(order -> {
             orderRepository.delete(order);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().<Void>build();
         }).orElse(ResponseEntity.notFound().build());
     }
 }
+ 

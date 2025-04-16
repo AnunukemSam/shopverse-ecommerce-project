@@ -18,7 +18,7 @@ COPY . .
 ENV RACK_ENV production
 
 # Expose port 3005 for the Sinatra app
-EXPOSE 3005
+EXPOSE 3006
 
 # Start the application using Ruby
 CMD ["ruby", "app.rb"]

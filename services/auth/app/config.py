@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings
+from pydantic import Extra
 
 class Settings(BaseSettings):
     DATABASE_URL: str
@@ -8,5 +9,6 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = ".env"
+        extra = Extra.allow
 
 settings = Settings()

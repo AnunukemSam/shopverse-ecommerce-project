@@ -4,11 +4,13 @@ import axios from 'axios';
 export default function ProductList() {
   const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    axios.get('/api/products')
-      .then(res => setProducts(res.data))
-      .catch(err => console.error(err));
-  }, []);
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
+useEffect(() => {
+  axios.get(`${API_BASE}/api/products`)
+    .then(res => setProducts(res.data))
+    .catch(err => console.error(err));
+}, []);
 
   return (
     <div>

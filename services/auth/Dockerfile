@@ -15,9 +15,6 @@ RUN pip install --upgrade pip && \
 # Copy the entire application source code into the container
 COPY . .
 
-# Copy .env file into the container so pydantic_settings can read it
-COPY .env .env
-
 # Set environment variables as needed (e.g., your app’s port)
 ENV PORT=3000
 

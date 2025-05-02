@@ -19,7 +19,6 @@ logs/
 # Environment files
 .env
 
-# Dependency artifacts
 go.sum
 
 # OS files

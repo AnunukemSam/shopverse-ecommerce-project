@@ -7,7 +7,7 @@ FROM golang:${GO_VERSION}-alpine AS build
 WORKDIR /app
 
 # Copy go.mod first for dependency caching
-COPY go.mod go.sum ./
+COPY go.mod ./
 RUN go mod download
 
 # Copy the rest of the source

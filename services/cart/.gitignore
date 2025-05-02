@@ -19,7 +19,6 @@ logs/
 # Environment files
 .env
 
-go.sum
 
 # OS files
 .DS_Store

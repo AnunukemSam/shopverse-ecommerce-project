@@ -16,7 +16,8 @@ It is designed to showcase DevOps practices in containerization, CI/CD, Kubernet
 
 ## 🖼 Architecture Diagram
 
-![ShopVerse Architecture](./architecture/diagram.png)
+![ChatGPT Image Apr 8, 2025, 07_38_24 AM](https://github.com/user-attachments/assets/417d9fac-7ea7-4e90-8ce0-2193ad2ebaaa)
+
 
 ---
 
